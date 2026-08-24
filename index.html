@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="温度、ee、ΔΔG の関係を計算するツール" />
+    <title>ee calculator | 温度・ΔΔG 計算機</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">STEREOSELECTIVITY TOOL</p>
+        <h1>ee calculator</h1>
+        <p>温度とエナンチオマー過剰率（ee）から ΔΔG を求め、温度による ee の変化を見積もります。</p>
+      </header>
+
+      <section class="notice" aria-label="計算上の注意">
+        <span aria-hidden="true">i</span>
+        <p>ΔΔG は「主生成物が有利なとき正」の値として表示します。温度によらず ΔΔG が一定、平衡支配であると仮定した概算です。</p>
+      </section>
+
+      <div class="calculators">
+        <section class="card" aria-labelledby="from-ee-title">
+          <div class="card-heading">
+            <p class="step">01</p>
+            <h2 id="from-ee-title">ee から ΔΔG と温度別 ee</h2>
+          </div>
+          <form id="ee-form" novalidate>
+            <div class="fields two-columns">
+              <label>
+                基準温度
+                <span class="input-wrap"><input id="reference-temperature" type="number" value="20" step="0.1" required /><span>°C</span></span>
+              </label>
+              <label>
+                ee
+                <span class="input-wrap"><input id="reference-ee" type="number" value="90" min="0" max="99.9999" step="0.01" required /><span>%</span></span>
+              </label>
+            </div>
+            <p class="hint">ee は 0 以上 100 未満で入力してください。</p>
+            <button type="submit">計算する</button>
+          </form>
+          <div class="result" id="ee-result" aria-live="polite">
+            <span>ΔΔG</span><strong>—</strong><small>kJ mol<sup>−1</sup></small>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="from-g-title">
+          <div class="card-heading">
+            <p class="step">02</p>
+            <h2 id="from-g-title">ΔΔG から指定温度の ee</h2>
+          </div>
+          <form id="g-form" novalidate>
+            <div class="fields two-columns">
+              <label>
+                ΔΔG
+                <span class="input-wrap"><input id="delta-g" type="number" value="4.00" min="0" step="0.01" required /><span>kJ/mol</span></span>
+              </label>
+              <label>
+                温度
+                <span class="input-wrap"><input id="target-temperature" type="number" value="-20" step="0.1" required /><span>°C</span></span>
+              </label>
+            </div>
+            <button type="submit">ee を計算する</button>
+          </form>
+          <div class="result" id="g-result" aria-live="polite">
+            <span>予測 ee</span><strong>—</strong><small>%</small>
+          </div>
+        </section>
+      </div>
+
+      <section class="card temperature-card" aria-labelledby="table-title">
+        <div class="table-heading">
+          <div>
+            <p class="step">TEMPERATURE PROFILE</p>
+            <h2 id="table-title">50 °C → −80 °C の ee</h2>
+          </div>
+          <p id="table-description">基準値を入力して「計算する」を押すと表示されます。</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">温度 (°C)</th><th scope="col">温度 (K)</th><th scope="col">予測 ee (%)</th><th scope="col">主:副 比</th></tr></thead>
+            <tbody id="temperature-table"><tr><td colspan="4" class="empty">計算結果はここに表示されます。</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="formula" aria-labelledby="formula-title">
+        <h2 id="formula-title">使用している式</h2>
+        <p>ΔΔG = RT ln[(1 + ee) / (1 − ee)]　　ee = tanh[ΔΔG / (2RT)] × 100</p>
+        <small>R = 8.314 J mol<sup>−1</sup> K<sup>−1</sup>、計算時の ee は小数（例: 90% → 0.90）です。</small>
+      </section>
+    </main>
+    <footer>Made for reaction planning · values are estimates</footer>
+    <script src="script.js"></script>
+  </body>
+</html>
